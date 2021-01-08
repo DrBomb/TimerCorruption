@@ -2,7 +2,7 @@
 
 ## Description
 
-Setting the "wall time" on the same function call as a timer set to MGOS_TIMER_RUN_NOW corrupts the timer and breaks all timer invokations.
+Setting the "wall time" on the same function call as a timer set to MGOS_TIMER_RUN_NOW corrupts the timer and breaks all timer invocations.
 
 We have a requiement to as much as possible, not lose the system clock, for that we set a reboot handler that writes the current wall time on reboot using an event handler.
 
