@@ -1,0 +1,34 @@
+--- mgos_timers.c	2021-01-08 20:52:57.863337600 +0000
++++ mgos_timers.c.new	2021-01-08 20:52:34.791986900 +0000
+@@ -18,6 +18,7 @@
+ #include "mgos_timers_internal.h"
+ 
+ #include "common/queue.h"
++#include "common/cs_dbg.h"
+ 
+ #include "mgos_event.h"
+ #include "mgos_features.h"
+@@ -126,6 +127,7 @@
+     mgos_runlock(s_timer_data_lock);
+   }
+   mongoose_schedule_poll(false /* from_isr */);
++  LOG(LL_ERROR, ("Setting timer with id %d", (mgos_timer_id) ti));
+   return (mgos_timer_id) ti;
+ }
+ 
+@@ -140,6 +142,7 @@
+     mgos_runlock(s_timer_data_lock);
+     return;
+   }
++  LOG(LL_ERROR, ("Removing timer with id %d", (mgos_timer_id) ti));
+   LIST_REMOVE(ti, entries);
+   if (s_timer_data->current == ti) {
+     schedule_next_timer(s_timer_data);
+@@ -187,6 +190,7 @@
+   struct timer_info *ti;
+   LIST_FOREACH(ti, &td->timers, entries) {
+     ti->next_invocation += ev_data->delta;
++    LOG(LL_ERROR, ("Updated timer %d to invocation %f", (mgos_timer_id) ti, ti->next_invocation));
+   }
+   mgos_runlock(s_timer_data_lock);
+ 

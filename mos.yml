@@ -1,0 +1,27 @@
+author: DrBomb
+description: Timer issue sample app
+arch: esp32
+version: 1.0
+manifest_version: 2017-05-18
+libs_version: ${mos.version}
+modules_version: ${mos.version}
+mongoose_os_version: ${mos.version}
+
+config_schema:
+  - ["App.save_time", "b", true, {title: "Enable loading wall time on reboot"}]
+  - ["App.long_timer", "b", true, {title: "Enable long timer"}]
+  - ["App.saved_time", "i", -1, {title: "Saved wall time"}]
+tags:
+  - js
+
+filesystem:
+  - fs
+
+sources:
+  - src
+  
+libs:
+  - origin: https://github.com/mongoose-os-libs/rpc-uart
+  - origin: https://github.com/mongoose-os-libs/rpc-service-config
+  - origin: https://github.com/mongoose-os-libs/wifi
+  - origin: https://github.com/mongoose-os-libs/sntp
