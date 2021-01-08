@@ -1,6 +1,6 @@
-#Timer corruption issue
+# Timer corruption issue
 
-##Description
+## Description
 
 Setting the "wall time" on the same function call as a timer set to MGOS_TIMER_RUN_NOW corrupts the timer and breaks all timer invokations.
 
@@ -8,13 +8,13 @@ We have a requiement to as much as possible, not lose the system clock, for that
 
 On boot, we set a timer with the MGOS_TIMER_REPEAT and MGOS_TIMER_RUN_NOW flags, then we set the wall time with `mgos_settimeofday`, this sets the timer's `next_invocation` to a negative number, breaking the timer and any other timer, including cron jobs!
 
-##App Config Schema
+## App Config Schema
 
 - save_time: Enable saving the wall time on reboot
 - long_timer: Enabling setting the long timer that runs instantly BEFORE setting any saved wall time.
 - saved_time: Saved wall time
 
-##Reproduction steps
+## Reproduction steps
 
 * Build and flash the app, run `mos console`.
 * On first run a "Long Timer" log should show up, which is the timer set to run instantly. It should also show up after 60 seconds.
@@ -23,7 +23,7 @@ On boot, we set a timer with the MGOS_TIMER_REPEAT and MGOS_TIMER_RUN_NOW flags,
 * After the reboot the "Long Timer" message will not show up on boot, nor the "Timer" message that should show up every 5 seconds. No other timer will work again on this board. Not even a `Sys.Reboot` RPC command will work because the board sets a 100 ms timer before actually doing the reboot.
 * To fix, a hardware reboot is needed.
 
-##Visualization
+## Visualization
 
 Apply the patch file `mgos_timers.c.patch` to the `mgos_timers.c` file. With a local build the command should be `patch deps/modules/mongoose-os/src/mgos_timers.c mgos_timers.c.patch`
 
